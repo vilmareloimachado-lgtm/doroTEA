@@ -109,7 +109,7 @@ Para um banco vazio, crie todas as tabelas usando os modelos atuais. Execute na 
 
 **Banco já existente:** `create_all` cria tabelas ausentes, mas não atualiza colunas de tabelas existentes. O modelo atual exige, entre outros campos, `vinculos.pode_enviar_materiais_sem_aprovacao`. Um banco antigo precisa de migração antes de usar a versão atual.
 
-**Atenção ao `database.sql`:** é um script antigo que apaga e recria tabelas; não contempla toda a estrutura atual de materiais. Para uma instalação nova, utilize o procedimento acima. Não execute esse script sobre dados que deseja preservar.
+**Alternativa pelo MySQL Workbench:** abra e execute o arquivo completo [database.sql](database.sql). Ele cria o banco `tea_db` e as seis tabelas atuais, incluindo materiais de apoio. Você pode usar essa alternativa em vez do comando Python. O script não apaga dados e usa `CREATE TABLE IF NOT EXISTS`, mas não atualiza tabelas antigas. Os valores padrão definidos apenas no Python são preenchidos pela aplicação ao cadastrar registros.
 
 ## Execução
 
@@ -177,7 +177,7 @@ Esse roteiro é uma orientação para validação local; sua inclusão não sign
 | `manual_doroTEA.pdf` | Manual do sistema |
 | `requirements.txt` | Dependências Python |
 | `tests/` e `test_*.py` | Arquivos de testes |
-| `database.sql` | Script SQL antigo; observar as limitações descritas acima |
+| `database.sql` | Criação do banco e das seis tabelas atuais; não migra tabelas existentes |
 
 ## Problemas comuns
 
