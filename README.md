@@ -140,6 +140,8 @@ Mantenha o terminal da API aberto. Em um segundo terminal, na raiz do projeto, e
 
 Abra http://127.0.0.1:5500/index.html no navegador. O servidor da interface e a API são processos separados: ambos devem permanecer ativos.
 
+Para conferir a versão de celular no computador, use o modo de dispositivo das ferramentas do navegador e selecione, por exemplo, 390 × 844 pixels.
+
 A interface deve apontar para a API local na porta `8000`. Se a configuração de endereço da API no HTML tiver sido alterada em sua cópia, ajuste-a para `http://127.0.0.1:8000`.
 
 O repositório disponibiliza o código; o link do GitHub sozinho não executa a aplicação. Estes passos são para uso local no computador.
@@ -182,7 +184,6 @@ Os testes unitários usam substitutos para o banco de dados e o Gemini.
 | `models/` | Modelos SQLAlchemy |
 | `config/` | Configuração do banco e autenticação |
 | `index.html` | Interface web |
-| `index_teste_celular.html` | Prévia para avaliação visual em formato celular |
 | `manual_doroTEA.pdf` | Manual do sistema |
 | `.env.example` | Modelo de configuração do ambiente |
 | `requirements.txt` | Dependências Python |
