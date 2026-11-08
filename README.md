@@ -69,17 +69,15 @@ Os comandos usam diretamente o Python do ambiente virtual, sem exigir a ativaç�
 
 ### 3. Configurar o ambiente
 
-Crie um arquivo chamado `.env` na raiz do projeto:
+Na raiz do projeto, copie o modelo para criar o arquivo local `.env`:
 
-```env
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=sua_senha_do_mysql
-DB_NAME=tea_db
-SECRET_KEY=substitua_por_uma_chave_aleatoria
-GEMINI_API_KEY=sua_chave_do_gemini
+```powershell
+Copy-Item .env.example .env
 ```
+
+No Linux ou macOS, use `cp .env.example .env`.
+
+Abra o `.env` e ajuste os dados do MySQL para o seu ambiente.
 
 Gere um valor para `SECRET_KEY` com:
 
@@ -175,6 +173,7 @@ Esse roteiro é uma orientação para validação local; sua inclusão não sign
 | `index.html` | Interface web |
 | `index_teste_celular.html` | Prévia para avaliação visual em formato celular |
 | `manual_doroTEA.pdf` | Manual do sistema |
+| `.env.example` | Modelo de configuração do ambiente |
 | `requirements.txt` | Dependências Python |
 | `tests/` e `test_*.py` | Arquivos de testes |
 | `database.sql` | Criação do banco e das seis tabelas atuais; não migra tabelas existentes |
