@@ -159,6 +159,17 @@ Em um banco novo, crie suas contas pela interface; não há credenciais de demon
 
 Esse roteiro é uma orientação para validação local; sua inclusão não significa que todos os fluxos foram executados automaticamente em um ambiente novo.
 
+## Testes automatizados
+
+Com as dependências instaladas, execute na raiz do projeto:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -v
+```
+
+No Linux ou macOS, use `.venv/bin/python -m unittest discover -v`.
+Os testes unitários usam substitutos para o banco de dados e o Gemini.
+
 ## Estrutura do repositório
 
 | Caminho | Conteúdo |
@@ -175,7 +186,7 @@ Esse roteiro é uma orientação para validação local; sua inclusão não sign
 | `manual_doroTEA.pdf` | Manual do sistema |
 | `.env.example` | Modelo de configuração do ambiente |
 | `requirements.txt` | Dependências Python |
-| `tests/` e `test_*.py` | Arquivos de testes |
+| `tests/` | Testes unitários |
 | `database.sql` | Criação do banco e das seis tabelas atuais; não migra tabelas existentes |
 
 ## Problemas comuns
