@@ -69,25 +69,40 @@ Os comandos usam diretamente o Python do ambiente virtual, sem exigir a ativaç�
 
 ### 3. Configurar o ambiente
 
-Crie um arquivo chamado `.env` na raiz do projeto:
+Na raiz do projeto, copie o modelo para criar o arquivo local `.env`:
 
-```env
-DB_HOST=localhost
-DB_PORT=3306
-DB_USER=root
-DB_PASSWORD=sua_senha_do_mysql
-DB_NAME=tea_db
-SECRET_KEY=substitua_por_uma_chave_aleatoria
-GEMINI_API_KEY=sua_chave_do_gemini
+```powershell
+Copy-Item .env.example .env
 ```
 
-Gere um valor para `SECRET_KEY` com:
+No Linux ou macOS, use `cp .env.example .env`.
+
+Abra o arquivo `.env` na raiz do projeto e preencha os dados da sua instalação do MySQL:
+
+- `DB_HOST` e `DB_PORT` indicam onde o MySQL está rodando. Para uma instalação local padrão, use `localhost` e `3306`.
+- `DB_USER` e `DB_PASSWORD` são o usuário e a senha que você usa para acessar o MySQL.
+- `DB_NAME` é o nome do banco que você vai criar no próximo passo. O exemplo usa `tea_db`.
+
+#### Gerar a chave de login do doroTEA
+
+A `SECRET_KEY` é a chave que o doroTEA usa para assinar os tokens de login. Gere uma chave no terminal:
 
 ```powershell
 .\.venv\Scripts\python.exe -c "import secrets; print(secrets.token_hex(32))"
 ```
 
-Use suas próprias credenciais. Não publique senhas ou chaves no GitHub. Sem `GEMINI_API_KEY`, as funções de IA ficam indisponíveis.
+Copie o valor gerado e substitua o texto de exemplo na linha `SECRET_KEY=` do `.env`.
+
+#### Configurar o Gemini para testar a IA
+
+1. Abra o [Google AI Studio](https://aistudio.google.com/apikey) e crie uma chave de API.
+2. No arquivo `.env`, coloque a chave na linha `GEMINI_API_KEY=`. O formato é `GEMINI_API_KEY=sua_chave_aqui`.
+3. Salve o arquivo. Se a API já estiver rodando, pare com **Ctrl + C** e inicie novamente conforme a seção **Execução**.
+4. No doroTEA, abra uma tarefa, clique em **Mostrar passos** e depois em **Dividir com IA**.
+
+A chave é necessária para **Dividir com IA** e **Chat IA**. Você pode criar tarefas e adicionar passos manualmente com `GEMINI_API_KEY=` em branco.
+
+Guarde suas senhas e chaves no `.env` local. O repositório inclui apenas o modelo `.env.example`.
 
 ### 4. Criar um banco novo
 
@@ -142,7 +157,9 @@ Mantenha o terminal da API aberto. Em um segundo terminal, na raiz do projeto, e
 
 Abra http://127.0.0.1:5500/index.html no navegador. O servidor da interface e a API são processos separados: ambos devem permanecer ativos.
 
-A interface deve apontar para a API local na porta `8000`. Se a configuração de endereço da API no HTML tiver sido alterada em sua cópia, ajuste-a para `http://127.0.0.1:8000`.
+Para conferir a versão de celular no computador, use o modo de dispositivo das ferramentas do navegador e selecione, por exemplo, 390 × 844 pixels.
+
+A interface deve apontar para a API local na porta `8000`. Se a configuração de endereço da API em `app.js` tiver sido alterada em sua cópia, ajuste-a para `http://127.0.0.1:8000`.
 
 O repositório disponibiliza o código; o link do GitHub sozinho não executa a aplicação. Estes passos são para uso local no computador.
 
@@ -161,6 +178,17 @@ Em um banco novo, crie suas contas pela interface; não há credenciais de demon
 
 Esse roteiro é uma orientação para validação local; sua inclusão não significa que todos os fluxos foram executados automaticamente em um ambiente novo.
 
+## Testes automatizados
+
+Com as dependências instaladas, execute na raiz do projeto:
+
+```powershell
+.\.venv\Scripts\python.exe -m unittest discover -v
+```
+
+No Linux ou macOS, use `.venv/bin/python -m unittest discover -v`.
+Os testes unitários usam substitutos para o banco de dados e o Gemini.
+
 ## Estrutura do repositório
 
 | Caminho | Conteúdo |
@@ -172,11 +200,13 @@ Esse roteiro é uma orientação para validação local; sua inclusão não sign
 | `repositories/` | Acesso ao banco |
 | `models/` | Modelos SQLAlchemy |
 | `config/` | Configuração do banco e autenticação |
-| `index.html` | Interface web |
-| `index_teste_celular.html` | Prévia para avaliação visual em formato celular |
+| `index.html` | Página de entrada da interface |
+| `styles.css` | Estilos e layout responsivo |
+| `app.js` | Telas, interações e comunicação com a API |
 | `manual_doroTEA.pdf` | Manual do sistema |
+| `.env.example` | Modelo de configuração do ambiente |
 | `requirements.txt` | Dependências Python |
-| `tests/` e `test_*.py` | Arquivos de testes |
+| `tests/` | Testes unitários |
 | `database.sql` | Criação do banco e das seis tabelas atuais; não migra tabelas existentes |
 
 ## Problemas comuns

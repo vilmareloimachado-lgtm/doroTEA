@@ -12,7 +12,6 @@ from repositories.usuario_repository import UsuarioRepository
 
 ESTILOS = {"direto", "detalhado"}
 NIVEIS_SUPORTE = {"Leve", "Moderado", "Severo"}
-TIPOS_USUARIO = {"cuidador", "usuario_tea"}
 
 
 class UsuarioService:
@@ -122,16 +121,6 @@ class UsuarioService:
     # ------------------------------------------------------------
     # Consultas simples
     # ------------------------------------------------------------
-    def listar_usuarios(self):
-        return self.repository.listar()
-
-    def buscar_usuario(self, nome):
-        nome = nome.strip()
-        usuario = self.repository.buscar_por_nome(nome)
-        if usuario is None:
-            raise ValueError("Perfil não encontrado.")
-        return usuario
-
     def buscar_usuario_por_id(self, usuario_id):
         return self.repository.buscar_por_id(usuario_id)
 
@@ -390,96 +379,3 @@ class UsuarioService:
             raise ValueError("Senha incorreta.")
 
         return self.repository.excluir_cuidador_em_cadeia(cuidador_id)
-
-    # ------------------------------------------------------------
-    # Metodos antigos (usados pelos menus do terminal e pelas rotas atuais)
-    # Continuam por nome. As rotas novas devem usar os métodos por id acima.
-    # ------------------------------------------------------------
-    def atualizar_usuario(self, nome, novo_nome=None, estilo_instrucao=None,
-                          nivel_suporte=None, data_nascimento=None, senha_login=None,
-                          email=None, tipo_usuario=None):
-        nome = nome.strip()
-
-        usuario_atual = self.repository.buscar_por_nome(nome)
-        if usuario_atual is None:
-            raise ValueError("Perfil não encontrado.")
-
-        if novo_nome is not None:
-            novo_nome = novo_nome.strip()
-            if not self.validar_nome(novo_nome):
-                raise ValueError("Nome inválido! Digite apenas letras e espaços.")
-            if len(novo_nome) < 3:
-                raise ValueError("O nome precisa ter pelo menos 3 caracteres.")
-            if novo_nome != nome and self.repository.buscar_por_nome(novo_nome) is not None:
-                raise ValueError("Já existe um perfil com esse nome.")
-
-        if estilo_instrucao is not None:
-            self._validar_estilo(estilo_instrucao)
-
-        if nivel_suporte is not None:
-            self._validar_nivel(nivel_suporte)
-
-        if senha_login is not None:
-            self.validar_senha(senha_login)
-            senha_login = self._gerar_hash(senha_login)
-
-        if data_nascimento is not None:
-            data_nascimento = self.validar_data_nascimento(data_nascimento)
-
-        if email is not None:
-            self.validar_email(email)
-            usuario_com_email = self.repository.buscar_por_email(email)
-            if usuario_com_email is not None and usuario_com_email.id != usuario_atual.id:
-                raise ValueError("Já existe um usuário com esse email.")
-
-        if tipo_usuario is not None and tipo_usuario not in TIPOS_USUARIO:
-            raise ValueError("O tipo de usuário deve ser 'cuidador' ou 'usuario_tea'.")
-
-        return self.repository.atualizar_por_nome(
-            nome,
-            novo_nome=novo_nome,
-            estilo_instrucao=estilo_instrucao,
-            nivel_suporte=nivel_suporte,
-            data_nascimento=data_nascimento,
-            senha_login=senha_login,
-            email=email,
-            tipo_usuario=tipo_usuario
-        )
-
-    def excluir_usuario(self, nome):
-        nome = nome.strip()
-        excluido = self.repository.excluir_por_nome(nome)
-        if not excluido:
-            raise ValueError("Perfil não encontrado.")
-        return True
-
-    def criar_usuario(self, nome, estilo_instrucao, nivel_suporte, data_nascimento,
-                      senha_login, email, tipo_usuario="cuidador", criado_em=None):
-        nome = self._validar_nome_completo(nome)
-        self._validar_estilo(estilo_instrucao)
-        self._validar_nivel(nivel_suporte)
-
-        if self.repository.buscar_por_nome(nome) is not None:
-            raise ValueError("Já existe um perfil com esse nome.")
-
-        self.validar_email(email)
-        if self.repository.buscar_por_email(email) is not None:
-            raise ValueError("Já existe um usuário com esse email.")
-
-        if tipo_usuario not in TIPOS_USUARIO:
-            raise ValueError("O tipo de usuário deve ser 'cuidador' ou 'usuario_tea'.")
-
-        self.validar_senha(senha_login)
-        senha_login = self._gerar_hash(senha_login)
-        data_nascimento = self.validar_data_nascimento(data_nascimento)
-
-        return self.repository.criar(
-            nome,
-            estilo_instrucao,
-            nivel_suporte,
-            data_nascimento,
-            senha_login,
-            email,
-            tipo_usuario,
-            criado_em
-        )
